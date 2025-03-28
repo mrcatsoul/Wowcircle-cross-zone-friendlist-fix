@@ -1,0 +1,6 @@
+## Interface: 30300
+## Title: |cff00bbeeFriendlistFix|r by |cFFC41F3BMori|r
+## Notes: Codework by some random guy. GitHub/YouTube/Discord/Telegram: @mrcatsoul,|r |cFFC41F3BTombstalker|r/|cFFffffffМораль|r/|cFFC41F3BMoriarty|r~WoWCircle WotLK
+## SavedVariables: FriendlistFix_Data
+
+FriendlistFix.lua
