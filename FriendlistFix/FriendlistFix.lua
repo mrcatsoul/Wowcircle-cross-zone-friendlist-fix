@@ -177,79 +177,80 @@ function f:ZONE_CHANGED_NEW_AREA()
   end)
 end
 
+f.t = 0 
+
 local function addRemovedOnCrossZoneFriendsNames()
   if inCrossZone() or tablelength(data["RemovedInCrossZoneFriendsNames"])==0 or friendListIsFull --[[GetNumFriends()>=50]] then
     return
   end
   
-  f.t = 0 
-  if not f:GetScript("OnUpdate") then
-    f:SetScript("OnUpdate", function(_,e)
-      f.t = f.t + e
-      if f.t < 0.1 then return end 
-      f.t = 0
-      
-      if inCrossZone() then
-        f.addRemovedStarted=nil
-        currentName=nil
-        f:SetScript("OnUpdate",nil)
-        return
-      end
-      
-      if currentName --[[ or lastAddFriendTime+0.5>GetTime() ]] then
-        print("|cffaaaa33Ждем пока чел "..colorName(currentName,nil,nil,nil,1,1).." добавится или нет.|r")
-        return
-      end
-      
-      if tablelength(data["RemovedInCrossZoneFriendsNames"])==0 or friendListIsFull --[[GetNumFriends()>=50]] then
-        if friendListIsFull --[[GetNumFriends()>=50]] then
-          print("|cffff0000Список друзей заполнен.|r")
-          
-          if tablelength(data["RemovedInCrossZoneFriendsNames"])>0 then
-            print("|cffaaaa33Список сохраненных удаленных на кроссе друзей очищен в связи с заполнением настоящего.|r")
-          end
-          
-          data["RemovedInCrossZoneFriendsNames"]={}
+  if f:GetScript("OnUpdate") then return end
+  
+  f:SetScript("OnUpdate", function(_,e)
+    f.t = f.t + e
+    if f.t < 0.1 then return end 
+    f.t = 0
+    
+    if inCrossZone() then
+      f.addRemovedStarted=nil
+      currentName=nil
+      f:SetScript("OnUpdate",nil)
+      return
+    end
+    
+    if currentName --[[ or lastAddFriendTime+0.5>GetTime() ]] then
+      print("|cffaaaa33Ждем пока чел "..colorName(currentName,nil,nil,nil,1,1).." добавится или нет.|r")
+      return
+    end
+    
+    if tablelength(data["RemovedInCrossZoneFriendsNames"])==0 or friendListIsFull --[[GetNumFriends()>=50]] then
+      if friendListIsFull --[[GetNumFriends()>=50]] then
+        print("|cffff0000Список друзей заполнен.|r")
+        
+        if tablelength(data["RemovedInCrossZoneFriendsNames"])>0 then
+          print("|cffaaaa33Список сохраненных удаленных на кроссе друзей очищен в связи с заполнением настоящего.|r")
         end
         
-        if tablelength(data["RemovedInCrossZoneFriendsNames"])==0 then
-          print("|cffaaaa33Список сохраненных удаленных на кроссе друзей пуст, удаление скрипта OnUpdate.|r")
-        end
-        
-        f.addRemovedStarted=nil
-        currentName=nil
-        f:SetScript("OnUpdate",nil)
-        return
-      end
-        
-      if not f.addRemovedStarted then
-        f.addRemovedStarted=true
-        local text="|cffaaaa33"..tablelength(data["RemovedInCrossZoneFriendsNames"]).." друзей были удалены на кроссе и могут быть добавлены:|r"
-        for name,note in pairs(data["RemovedInCrossZoneFriendsNames"]) do
-          text = text .. " " .. colorName(name,nil,nil,nil,1,1)
-          if note~="" then
-            text = text.."("..note..")"
-          end
-        end
-        print(text)
+        data["RemovedInCrossZoneFriendsNames"]={}
       end
       
+      if tablelength(data["RemovedInCrossZoneFriendsNames"])==0 then
+        print("|cffaaaa33Список сохраненных удаленных на кроссе друзей пуст, удаление скрипта OnUpdate.|r")
+      end
+      
+      f.addRemovedStarted=nil
+      currentName=nil
+      f:SetScript("OnUpdate",nil)
+      return
+    end
+      
+    if not f.addRemovedStarted then
+      f.addRemovedStarted=true
+      local text="|cffaaaa33"..tablelength(data["RemovedInCrossZoneFriendsNames"]).." друзей были удалены на кроссе и могут быть добавлены:|r"
       for name,note in pairs(data["RemovedInCrossZoneFriendsNames"]) do
-        if not curFriendsNames[name] then
-          if not inCrossZone() then 
-            lastAddFriendTime=GetTime()+0.5
-            local nameNote = note~="" and colorName(name,nil,nil,nil,1,1).."("..note..")" or colorName(name,nil,nil,nil,1,1)
-            print("|cffaaaa33"..nameNote.." добавляется в друзья из очереди сохраненных удаленных на кроссе.|r")
-            currentName=name
-            AddFriend(name)
-          end
-          break
-        else
-          data["RemovedInCrossZoneFriendsNames"][name]=nil
+        text = text .. " " .. colorName(name,nil,nil,nil,1,1)
+        if note~="" then
+          text = text.."("..note..")"
         end
       end
-    end)
-  end
+      print(text)
+    end
+    
+    for name,note in pairs(data["RemovedInCrossZoneFriendsNames"]) do
+      if not curFriendsNames[name] then
+        if not inCrossZone() then 
+          lastAddFriendTime=GetTime()+0.5
+          local nameNote = note~="" and colorName(name,nil,nil,nil,1,1).."("..note..")" or colorName(name,nil,nil,nil,1,1)
+          print("|cffaaaa33"..nameNote.." добавляется в друзья из очереди сохраненных удаленных на кроссе.|r")
+          currentName=name
+          AddFriend(name)
+        end
+        break
+      else
+        data["RemovedInCrossZoneFriendsNames"][name]=nil
+      end
+    end
+  end)
 end
 
 f.checkFriendsNextTime = 0
