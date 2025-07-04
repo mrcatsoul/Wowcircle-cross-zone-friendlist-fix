@@ -2,7 +2,7 @@
 -- данные сохраняются в таблицу FriendlistFix_Data в области глобальных переменных
 
 local AUTO_NOTE_BY_NAME = true -- если нет заметки то автозаполнять её ником
-local FAST_FRIENDLIST_UPDATE_WHEN_VISIBLE = false -- быстрое обновление френдлиста когда тот открыт
+local FAST_FRIENDLIST_UPDATE_WHEN_VISIBLE = true -- быстрое обновление френдлиста когда тот открыт
 local FAST_FRIENDLIST_UPDATE_INTERVAL = 0.1 -- интервал обновлений открытого френдлиста
 
 local ADDON_NAME, core = ...
