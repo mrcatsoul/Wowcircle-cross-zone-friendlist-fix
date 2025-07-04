@@ -6,6 +6,7 @@ Wow 3.3.5 addon.
 
 04.07.2025
 Фикс багов + добавлены опции
+
 local AUTO_NOTE_BY_NAME = true -- если нет заметки то автозаполнять её ником
 local FAST_FRIENDLIST_UPDATE_WHEN_VISIBLE = false -- быстрое обновление френдлиста когда тот открыт
 local FAST_FRIENDLIST_UPDATE_INTERVAL = 0.1 -- интервал обновлений открытого френдлиста
